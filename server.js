@@ -1,8 +1,21 @@
-const io = require('socket.io')(process.env.PORT || 5000, {
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, {
     cors: {
-        origin: 'https://amazingchatapp.herokuapp.com/',
+        origin: "https://amazingchatapp.herokuapp.com/",
         methods: ['GET', 'POST']
     }
+})
+
+app.use(require('cors')());
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
 })
 
 io.on('connection', socket => {
@@ -19,3 +32,5 @@ io.on('connection', socket => {
     })
   })
 })
+
+server.listen(process.env.PORT || 3001)
