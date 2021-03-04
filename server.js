@@ -1,6 +1,6 @@
-const io = require('socket.io')(5000, {
+const io = require('socket.io')(process.env.PORT || 5000, {
     cors: {
-        origin: 3000,
+        origin: 'https://amazingchatapp.herokuapp.com/',
         methods: ['GET', 'POST']
     }
 })
